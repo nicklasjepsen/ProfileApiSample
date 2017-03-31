@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProfileApi.WebApi.Data;
+using ProfileApi.WebApi.Models;
 
 namespace ProfileApi.WebApi.Controllers
 {
@@ -17,33 +18,38 @@ namespace ProfileApi.WebApi.Controllers
             this.context = context;
         }
 
-        // GET api/values
+        // GET api/people
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             return Ok(await context.People.Include(p => p.Gender).ToListAsync());
         }
 
-        // GET api/values/5
+        // GET api/people/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var entity = await context.People.Include(p => p.Gender).SingleOrDefaultAsync(p =>
+                p.Id == id);
+            if (entity == null)
+                return NotFound();
+
+            return Ok(entity);
         }
 
-        // POST api/values
+        // POST api/people
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/values/5
+        // PUT api/people/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/people/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
