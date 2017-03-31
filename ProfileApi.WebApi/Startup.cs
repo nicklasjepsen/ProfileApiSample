@@ -37,14 +37,14 @@ namespace ProfileApi.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async Task Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, PersonContext personContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, PersonContext personContext)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             app.UseMvc();
 
-            await DbInitializer.Initialize(personContext);
+            DbInitializer.Initialize(personContext);
         }
     }
 }

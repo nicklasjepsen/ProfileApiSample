@@ -9,7 +9,7 @@ namespace ProfileApi.WebApi.Data
 {
     public class DbInitializer
     {
-        public async static Task Initialize(PersonContext context)
+        public static void Initialize(PersonContext context)
         {
             // Using EF migrations to a. Create the DB if not exist or b. migrate the database if it exists 
             context.Database.Migrate();
@@ -33,7 +33,7 @@ namespace ProfileApi.WebApi.Data
                     Name = "Other"
                 }
             };
-            await context.Genders.AddRangeAsync(genders);
+            context.Genders.AddRange(genders);
 
             var people = new[]
             {
@@ -54,7 +54,9 @@ namespace ProfileApi.WebApi.Data
                     TimeCreated = DateTime.UtcNow
                 }
             };
-            await context.People.AddRangeAsync(people);
+            context.People.AddRange(people);
+
+            context.SaveChanges();
         }
     }
 }
