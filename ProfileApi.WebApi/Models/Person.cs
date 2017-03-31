@@ -11,7 +11,9 @@ namespace ProfileApi.WebApi.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public Gender Gender { get; set; }
+        public int GenderId { get; set; }
         public DateTime TimeCreated { get; set; }
+
+        public Gender Gender { get; set; }
     }
 }
