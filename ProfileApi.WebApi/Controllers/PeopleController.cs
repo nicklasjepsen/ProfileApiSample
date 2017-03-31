@@ -12,25 +12,24 @@ namespace ProfileApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class PeopleController : Controller
     {
-        private readonly PersonContext context;
-        public PeopleController(PersonContext context)
+        private readonly IPersonRepository repository;
+        public PeopleController(IPersonRepository repository)
         {
-            this.context = context;
+            this.repository = repository;
         }
 
         // GET api/people
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            return Ok(await context.People.Include(p => p.Gender).ToListAsync());
+            return Ok(repository.GetAll());
         }
 
         // GET api/people/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var entity = await context.People.Include(p => p.Gender).SingleOrDefaultAsync(p =>
-                p.Id == id);
+            var entity = await repository.FindAsync(id);
             if (entity == null)
                 return NotFound();
 
@@ -39,20 +38,52 @@ namespace ProfileApi.WebApi.Controllers
 
         // POST api/people
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> Post([FromBody]Person model)
         {
+            if (model == null)
+                return BadRequest("Please provide a Person.");
+            if (string.IsNullOrEmpty(model.Email))
+                return BadRequest("An email address is required.");
+
+            var entity = await repository.AddAsync(model);
+
+            return CreatedAtRoute(nameof(Get), entity.Id, entity);
         }
 
         // PUT api/people/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Put(int id, [FromBody]Person model)
         {
+            if (model == null || model.Id != id)
+            {
+                return BadRequest();
+            }
+
+            var entity = await repository.FindAsync(id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            await repository.UpdateAsync(model);
+            return new NoContentResult();
         }
 
         // DELETE api/people/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                await repository.RemoveAsync(id);
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e);
+                return BadRequest("No Person found with id " + id);
+            }
+
+            return new NoContentResult();
         }
     }
 }
