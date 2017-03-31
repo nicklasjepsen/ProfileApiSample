@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ProfileApi.WebApi.Data;
 
 namespace ProfileApi.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class PeopleController : Controller
     {
+        private readonly PersonContext context;
+        public PeopleController(PersonContext context)
+        {
+            this.context = context;
+        }
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(await context.People.Include(p => p.Gender).ToListAsync());
         }
 
         // GET api/values/5
