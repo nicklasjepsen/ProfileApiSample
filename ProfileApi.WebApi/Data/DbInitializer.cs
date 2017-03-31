@@ -9,7 +9,7 @@ namespace ProfileApi.WebApi.Data
 {
     public class DbInitializer
     {
-        public static void Initialize(PersonContext context)
+        public static void Initialize(ApplicationDbContext context)
         {
             // Using EF migrations to a. Create the DB if not exist or b. migrate the database if it exists 
             context.Database.Migrate();

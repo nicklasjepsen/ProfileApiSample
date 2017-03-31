@@ -7,12 +7,12 @@ using ProfileApi.WebApi.Models;
 
 namespace ProfileApi.WebApi.Data
 {
-    public class PersonContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<Person> People { get; set; }
         public DbSet<Gender> Genders { get; set; }
 
-        public PersonContext(DbContextOptions<PersonContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
 

@@ -18,9 +18,9 @@ namespace ProfileApi.WebApi.Data
 
     public class PersonRepository : IPersonRepository
     {
-        private readonly PersonContext context;
+        private readonly ApplicationDbContext context;
 
-        public PersonRepository(PersonContext context)
+        public PersonRepository(ApplicationDbContext context)
         {
             this.context = context;
         }
