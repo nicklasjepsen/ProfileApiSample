@@ -18,7 +18,7 @@ namespace ProfileApi.Tests
         [TestMethod]
         public async Task TestGet()
         {
-            var id = 1;
+            const int id = 1;
             repositoryContext = new Mock<IPersonRepository>();
             repositoryContext.Setup(mock => mock.FindAsync(It.IsAny<int>())).Returns(Task.Run(() => new Person
             {
