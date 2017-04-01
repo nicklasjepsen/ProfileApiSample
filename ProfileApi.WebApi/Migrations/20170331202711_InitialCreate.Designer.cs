@@ -7,7 +7,7 @@ using ProfileApi.WebApi.Data;
 
 namespace ProfileApi.WebApi.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(PersonContext))]
     [Migration("20170331202711_InitialCreate")]
     partial class InitialCreate
     {
